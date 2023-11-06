@@ -10,10 +10,18 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLHandshakeException;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+import io.javalin.http.HttpStatus;
 
 public class ScanThread extends Thread {
 
@@ -32,16 +40,37 @@ public class ScanThread extends Thread {
 
 	@Override
 	public void run() {
+		int timeout = 1000;
+		RequestConfig configRequest = RequestConfig.custom().setConnectTimeout(timeout).build();
+		
 		for (String ip : ips) {
-			try (CloseableHttpResponse resp = client.execute(null)) {
+			HttpGet request = new HttpGet("https://" + ip + "/");
+//			HttpGet request = new HttpGet("https://" + "www.baeldung.com" + "/");
+			request.setConfig(configRequest);
+			try (CloseableHttpResponse response = this.client.execute(request)) {
+
+				System.out.println("test");
+				System.out.println(response.getStatusLine());
+				if(response.getStatusLine().getStatusCode() == 200) {
+					
+				}
 				
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+//			} catch (SSLPeerUnverifiedException e) {
+//				// TODO: handle exception
+//			} 
+//			catch(SSLHandshakeException e) {
+//				System.out.println("handshake failed on: " + request.getURI());
+//			} 
+//			catch (ConnectTimeoutException e) {
+//				// TODO: handle exception
+//			} catch (ClientProtocolException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 		}
 	}
 
