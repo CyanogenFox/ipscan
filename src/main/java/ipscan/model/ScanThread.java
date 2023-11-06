@@ -42,7 +42,6 @@ public class ScanThread extends Thread {
 
 	public ScanThread(CloseableHttpClient client, String string) {
 		this.client = client;
-		System.out.println(string);
 	}
 
 	@Override
@@ -80,7 +79,7 @@ public class ScanThread extends Thread {
 				 * other IP addresses.
 				 */
 			} catch (ConnectTimeoutException e) {
-				// TODO: handle exception
+				
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

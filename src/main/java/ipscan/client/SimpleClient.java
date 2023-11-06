@@ -5,7 +5,6 @@ import java.net.UnknownHostException;
 import java.security.cert.CertificateParsingException;
 import java.util.List;
 
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
@@ -15,15 +14,11 @@ import ipscan.model.utils.IpScanUtils;
 
 public class SimpleClient {
 
-	private HttpGet request;// TODO delete?
-
-	public SimpleClient() {
-		request = new HttpGet();
-	}
+	public SimpleClient() {}
 
 	// TODO request timeout, handle exceptions properly, threads_count can't be 0
 	// TODO handle exception that occurs when threads count bigger then IPs
-	public void getEntity(String ip, String mask, int i_threads)
+	public void openConnection(String ip, String mask, int i_threads)
 			throws CertificateParsingException, UnknownHostException, IOException, InterruptedException {
 		List<String> ipList = IpScanUtils.ipMaskToList(ip, mask);
 		ScanThread[] scanThreads = new ScanThread[i_threads];
@@ -60,14 +55,6 @@ public class SimpleClient {
 		}
 
 		System.out.println("end of threads");// TODO test only
-	}
-
-	public HttpGet getRequset() {
-		return request;
-	}
-
-	public void setRequest(String url) {
-		this.request = new HttpGet(url);
 	}
 
 }

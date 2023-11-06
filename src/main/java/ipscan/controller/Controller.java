@@ -1,16 +1,12 @@
 package ipscan.controller;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.http.conn.ConnectTimeoutException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
 import ipscan.client.SimpleClient;
 import ipscan.model.IPResponse;
 
@@ -28,19 +24,10 @@ public class Controller {
 	public void run() {
 		app = Javalin.create().get("/", ctx -> ctx.status(200)).start(8080);
 		app.post("/sendips", ctx -> {
-			IPResponse res = mapper.readValue(ctx.body().toString(), new TypeReference<IPResponse>() {
-			});
+			IPResponse res = mapper.readValue(ctx.body().toString(), new TypeReference<IPResponse>() {});
 			if (ipValidation(res)) {
-				client.setRequest("https://" + res.getIp() + "/"); // TODO delete + catch
-				try {
-					client.getEntity(res.getIp(), res.getMask(), res.getThread_count());
-					ctx.status(200);
-				} catch (IOException e) {
-					if (e instanceof ConnectTimeoutException) {
-						ctx.status(HttpStatus.BAD_REQUEST);
-						ctx.result("Invalid IP address or mask");
-					}
-				}
+				client.openConnection(res.getIp(), res.getMask(), res.getThread_count());
+				ctx.status(200);
 			}
 		});
 	}
