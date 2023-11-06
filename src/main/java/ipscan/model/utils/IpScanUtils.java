@@ -33,4 +33,19 @@ public class IpScanUtils {
 				(bits & 0x0000000000ff00) >> 8, bits & 0xff);
 	}
 
+	public static void writeNamesToFile(String string) {
+		
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+

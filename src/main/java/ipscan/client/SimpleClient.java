@@ -27,22 +27,19 @@ public class SimpleClient {
 	}
 
 	// TODO request timeout, handle exceptions properly, threads_count cant be 0
+	// TODO handle exception that occurs when threads count bigger then IPs
 	public void getEntity(String ip, String mask, int i_threads)
 			throws CertificateParsingException, UnknownHostException, IOException, InterruptedException {
 		List<String> ipList = IpScanUtils.ipMaskToList(ip, mask);
 		ScanThread[] scanThreads = new ScanThread[i_threads];
+		i_threads = i_threads > ipList.size() ? ipList.size() : i_threads;
 
 		PoolingHttpClientConnectionManager pcm = new PoolingHttpClientConnectionManager();
 		pcm.setMaxTotal(i_threads);
 		pcm.setDefaultMaxPerRoute(1);
 		CloseableHttpClient client = HttpClients.custom().setConnectionManager(pcm).build();
 
-//		SSLConnectionSocketFactory scsf = new SSLConnectionSocketFactory(SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build(),
-//																		NoopHostnameVerifier.INSTANCE);
-//		client = HttpClients.custom().setSSLSocketFactory(scsf).build(); // TODO probably not the best idea because of NoopHostnameVerifier
-
 		int iPerThread = ipList.size() / i_threads + 1;
-
 		for (int i = 0, sub_i = 0, sub_z = iPerThread; i < scanThreads.length; i++) {
 			if (ipList.size() >= i_threads) {
 				if (sub_i < ipList.size()) {
@@ -67,7 +64,7 @@ public class SimpleClient {
 				thread.join();
 		}
 
-		System.out.println("end of threads");// TODO
+		System.out.println("end of threads");// TODO test only
 	}
 
 	public HttpGet getRequset() {

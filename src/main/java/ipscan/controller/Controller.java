@@ -31,7 +31,7 @@ public class Controller {
 			IPResponse res = mapper.readValue(ctx.body().toString(), new TypeReference<IPResponse>() {
 			});
 			if (ipValidation(res)) {
-				client.setRequest("https://" + res.getIp() + "/");
+				client.setRequest("https://" + res.getIp() + "/"); // TODO delete + catch
 				try {
 					client.getEntity(res.getIp(), res.getMask(), res.getThread_count());
 					ctx.status(200);
