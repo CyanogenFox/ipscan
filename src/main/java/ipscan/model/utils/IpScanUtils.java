@@ -1,5 +1,8 @@
 package ipscan.model.utils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,19 +36,15 @@ public class IpScanUtils {
 				(bits & 0x0000000000ff00) >> 8, bits & 0xff);
 	}
 
-	public static void writeNamesToFile(String string) {
-		
+	public static void writeNamesToFile(String string) throws IOException {
+		/*
+		 * no duplicate checker, no specification on folder. Change if needed
+		 */
+		BufferedWriter bw = new BufferedWriter(new FileWriter("DN_names.txt", true));
+		bw.write(string);
+		bw.newLine();
+		bw.flush();
+		bw.close();
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-

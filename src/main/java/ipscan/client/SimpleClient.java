@@ -5,15 +5,10 @@ import java.net.UnknownHostException;
 import java.security.cert.CertificateParsingException;
 import java.util.List;
 
-import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.ssl.SSLContexts;
 
 import ipscan.model.ScanThread;
 import ipscan.model.utils.IpScanUtils;
@@ -26,7 +21,7 @@ public class SimpleClient {
 		request = new HttpGet();
 	}
 
-	// TODO request timeout, handle exceptions properly, threads_count cant be 0
+	// TODO request timeout, handle exceptions properly, threads_count can't be 0
 	// TODO handle exception that occurs when threads count bigger then IPs
 	public void getEntity(String ip, String mask, int i_threads)
 			throws CertificateParsingException, UnknownHostException, IOException, InterruptedException {

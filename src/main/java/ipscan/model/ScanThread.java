@@ -16,7 +16,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -29,7 +28,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 
-import io.javalin.http.HttpStatus;
 import ipscan.model.utils.IpScanUtils;
 
 public class ScanThread extends Thread {
@@ -58,10 +56,10 @@ public class ScanThread extends Thread {
 
 			/**
 			 * This implementation executes standard SSL verification by matching IP address
-			 * with hostname (or it's alternative). But it is unknown if provided IP
-			 * addresses have verified (matched) hostname, thus implemented functionality
-			 * that ignores non matched hostname with IP. TO DEVs - if it's not required for
-			 * IP to be matched with hostname, you can uncomment this function
+			 * with host name (or it's alternative). But it is unknown if provided IP
+			 * addresses have verified (matched) host name, thus implemented functionality
+			 * that ignores non matched host name with IP. TO DEVs - if it's not required
+			 * for IP to be matched with host name, you can uncomment this function
 			 * "noHostnameVerification(HttpRequest)". Note that is very insecure.
 			 */
 			try (CloseableHttpResponse response = this.client.execute(request)) {
@@ -73,13 +71,13 @@ public class ScanThread extends Thread {
 			} catch (SSLPeerUnverifiedException e) {
 				/*
 				 * Uncomment this function if it's not important for SSL to be anchored with
-				 * hostname
+				 * host name
 				 */
 				noHostnameVerification(request);
 			} catch (SSLHandshakeException | CertificateParsingException e) {
 				/*
-				 * Given IP don't have any ssl cert, ignore this exception to look for other ip
-				 * addresses.
+				 * Given IP don't have any SSL certification, ignore this exception to look for
+				 * other IP addresses.
 				 */
 			} catch (ConnectTimeoutException e) {
 				// TODO: handle exception
@@ -132,7 +130,6 @@ public class ScanThread extends Thread {
 				if (altNames != null) {
 					for (List<?> altName : altNames) {
 						if (altName.get(0).equals(2)) { // 2 is DNS, 7 is IP
-							System.out.println(altName.get(1).toString()); // TODO write names to file
 							IpScanUtils.writeNamesToFile(altName.get(1).toString());
 						}
 					}

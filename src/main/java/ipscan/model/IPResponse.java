@@ -6,9 +6,10 @@ public class IPResponse {
 	private String ip;
 	private String mask;
 	private int thread_count;
-	
-	public IPResponse() {}
-	
+
+	public IPResponse() {
+	}
+
 	public IPResponse(String ip, String mask, int thread_count) {
 		super();
 		this.ip = ip;
@@ -44,5 +45,5 @@ public class IPResponse {
 		IPResponse other = (IPResponse) obj;
 		return Objects.equals(ip, other.ip) && Objects.equals(mask, other.mask) && thread_count == other.thread_count;
 	}
-	
+
 }
