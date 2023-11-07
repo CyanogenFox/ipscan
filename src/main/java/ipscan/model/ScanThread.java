@@ -13,10 +13,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -46,7 +46,7 @@ public class ScanThread extends Thread {
 
 	@Override
 	public void run() {
-		int timeout = 1000;
+		int timeout = 2110;// max response time by standard (1.3 - 2.11)
 		RequestConfig configRequest = RequestConfig.custom().setConnectTimeout(timeout).build();
 
 		for (String ip : ips) {
@@ -72,25 +72,25 @@ public class ScanThread extends Thread {
 				 * Uncomment this function if it's not important for SSL to be anchored with
 				 * host name
 				 */
-				noHostnameVerification(request);
+//				noHostnameVerification(request);
 			} catch (SSLHandshakeException | CertificateParsingException e) {
 				/*
 				 * Given IP don't have any SSL certification, ignore this exception to look for
 				 * other IP addresses.
 				 */
 			} catch (ConnectTimeoutException e) {
-				
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SSLException e) {
+				System.out.println(e.getMessage());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+
 	}
 
+	@SuppressWarnings("unused")
 	private void noHostnameVerification(HttpGet request) {
+		// TODO change to poolclient if using this
 		SSLConnectionSocketFactory scsf;
 		try {
 			scsf = new SSLConnectionSocketFactory(
@@ -102,9 +102,11 @@ public class ScanThread extends Thread {
 
 				getSSLfromIp(request.getURI().toString());
 
-			} catch (ClientProtocolException | CertificateParsingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (SSLHandshakeException | CertificateParsingException e) {
+				/*
+				 * Given IP don't have any SSL certification, ignore this exception to look for
+				 * other IP addresses.
+				 */
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

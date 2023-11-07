@@ -1,25 +1,18 @@
 package ipscan.client;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.security.cert.CertificateParsingException;
 import java.util.List;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
+import io.javalin.http.HttpStatus;
 import ipscan.model.ScanThread;
 import ipscan.model.utils.IpScanUtils;
 
 public class SimpleClient {
 
-	public SimpleClient() {}
-
-	// TODO request timeout, handle exceptions properly, threads_count can't be 0
-	// TODO handle exception that occurs when threads count bigger then IPs
-	public void openConnection(String ip, String mask, int i_threads)
-			throws CertificateParsingException, UnknownHostException, IOException, InterruptedException {
+	public HttpStatus openConnection(String ip, String mask, int i_threads) throws InterruptedException {
 		List<String> ipList = IpScanUtils.ipMaskToList(ip, mask);
 		ScanThread[] scanThreads = new ScanThread[i_threads];
 		i_threads = i_threads > ipList.size() ? ipList.size() : i_threads;
@@ -45,6 +38,7 @@ public class SimpleClient {
 					break;
 			}
 		}
+
 		for (ScanThread thread : scanThreads) {
 			if (thread != null)
 				thread.start();
@@ -54,7 +48,8 @@ public class SimpleClient {
 				thread.join();
 		}
 
-		System.out.println("end of threads");// TODO test only
+		return HttpStatus.OK;
+
 	}
 
 }

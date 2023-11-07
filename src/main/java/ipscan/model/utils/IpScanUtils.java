@@ -10,8 +10,6 @@ import org.apache.commons.net.util.SubnetUtils;
 
 public class IpScanUtils {
 
-//	private final static String ADDRESS = "http://localhost:8080";
-
 	public static List<String> ipMaskToList(String ip, String mask) {
 		try {
 			SubnetUtils utils = new SubnetUtils(ip, convertMask(mask));
@@ -22,7 +20,6 @@ public class IpScanUtils {
 			}
 			return ipList;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
