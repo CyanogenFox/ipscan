@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" charset="UTF-8">
+    <title>IpScan</title>
+    <script defer type="text/javascript" src="./script.js"></script>
+    <style>
+        body {
+            background-color: lightblue;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>IP-CONFIG</h1>
+    <div>
+    <label for="address">Insert IP address:</label><br>
+    <input id="address" type="text" pattern="^[0-9\.]*$"><br>
+    <label for="mask">Choose mask:</label><br>
+    <select id="mask">
+        <option>select...</option>
+        <script>
+        for (var i = 0; i <= 32; i++) {
+            document.write('<option value="' + i + '">' + "/" + i + '</option>');
+        }
+        </script>
+    </select><br>
+    <label for="threads">Insert number of threads:</label><br>
+    <input id="threads" type="number"><br>
+    <br>
+    <button id="start_btn">Start scanning</button>
+    </div>
+</body>
+</html>
